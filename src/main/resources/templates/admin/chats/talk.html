@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+  <head>
+    <meta charset="UTF-8" th:remove="tag">
+  </head>
+  <body>
+    <div layout:fragment="content">
+	 <table>
+	  <div th:each="event: ${event}" th:object="${event}">
+		<h1 th:text="*{name}"></h1>
+	  </div>
+	   
+	  <div th:each="chat: ${chats}" th:object="${chat}">
+	  
+	    <div class="border border-success bg-success " style="margin:0 0 10px auto; padding: 10px; width:30%" th:if="${ chat.user.id == userId}">
+	       <span class="text-white text-right" th:text="*{user.email}"></span><br>
+	       <span class="text-white text-right" th:text="*{body}"></span><br>
+	       <span class="text-white text-right" th:text="*{#dates.format(createdAt, 'yyyy年MM月dd日HH時mm分ss秒')}"></span>
+	    </div>
+	    
+		
+	   <div class="border border-secondary " style="margin:0 auto 10px 0; padding: 10px; width:30%" th:if="${!( chat.user.id == userId )}">
+		   <span class="text-left" th:text="*{user.email}"></span><br>
+	       <span class="text-left" th:text="*{body}"></span><br>
+	       <span class="text-left" th:text="*{#dates.format(createdAt, 'yyyy年MM月dd日HH時mm分ss秒')}"></p>
+	   </div>
+	   
+	 </table>
+	   
+<!--		  <div class="pull-right">右寄せ</div>-->
+<!--		  <div class="center-block">中央</div>-->
+<!--		  <p class="text-left">左寄せ</p>-->
+<!--	      <p class="text-center">中央</p>-->
+<!--	      <p class="text-right">右寄せ</p>-->
+		  
+	  
+	 <table>
+	  <form th:action="@{/admin/chats/create}" th:object="${chat}" method="post">
+		<ul th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
+          <li th:each="err : ${#fields.errors('*')}">
+            <span th:text="${err}"></span>
+          </li>
+        </ul>
+		
+		<div class="form-group" th:classappend="${#fields.hasErrors('body')} ? error">
+          <label for="body">チャット</label>
+          <input class="form-control" type="text" id="body" name="body" th:field="*{body}">
+        </div>
+		
+		
+		<div>
+		  <input type="hidden" name="event" id="event" th:value="${event.id}">
+		</div>
+		<div>
+          <input class="btn btn-primary mb-4" type="submit" value="投稿">
+      	</div>
+	  </form>
+	 </table>
+	 
+	</div>		
+	  
+    </div>
+  </body>
+</html>

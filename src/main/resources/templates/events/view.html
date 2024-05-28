@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+  <head>
+    <meta charset="UTF-8" th:remove="tag">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <h1>イベント詳細</h1>
+      <table class="table table-striped mt-4">
+        <thead class="bg-primary text-white">
+          <tr>
+            <th>id</th>
+            <th>イベント名</th>
+            <th>最大参加者数</th>
+			<th>カテゴリ</th>
+			<th>管理ユーザ</th>
+            <th>作成日</th>
+            <th>更新日</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="eventdetail: ${eventdetail}" th:object="${eventdetail}">
+            <td th:text="*{id}"></td>
+            <td th:text="*{name}"></td>
+            <td th:text="*{max_participant}"></td>
+			<td th:text="*{category.name}"></td>
+			<td th:text="*{user.email}"></td>
+            <td th:text="*{#dates.format(createdAt, 'yyyy年MM月dd日HH時mm分ss秒')}"></td>
+            <td th:text="*{#dates.format(modifiedAt, 'yyyy年MM月dd日HH時mm分ss秒')}"></td>
+          </tr>
+        </tbody>
+      </table>
+	  <p class="bg-info p-3 text-body text-center" th:object="${eventdetail}">
+		<span th:text="|現在の参加者数：*{eventUsers.size()} 名|"></span>
+	  </p>
+	  <div class="text-center">
+	   <a th:href="@{/users/login}" class="btn btn-primary text-center">ログイン</a>
+	  </div>
+    </div>
+  </body>
+</html>
